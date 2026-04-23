@@ -1,7 +1,3 @@
-<script setup lang="ts">
-const { data: attractions, pending, error } = await useFetch('http://localhost:8000/api/attractions')
-</script>
-
 <template>
   <div>
     <h1>Attractions Catalog</h1>
@@ -26,3 +22,16 @@ const { data: attractions, pending, error } = await useFetch('http://localhost:8
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+interface Attraction {
+  id: number;
+  name: string;
+  category_id: number;
+  description: string | null;
+  coordinate: string | null;
+  img_path: string | null;
+}
+
+const { data: attractions, pending, error } = await useFetch<Attraction[]>('http://localhost:8000/api/attractions')
+</script>
