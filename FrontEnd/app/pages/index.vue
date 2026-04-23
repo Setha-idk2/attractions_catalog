@@ -13,7 +13,7 @@
     <div v-else>
       <ul>
         <li v-for="attraction in attractions" :key="attraction.id">
-          <h2>{{ attraction.name }}</h2>
+          <h2 class="pt-3">{{ attraction.name }}</h2>
           <p>category: {{ attraction.category_id }}</p>
           <p>{{ attraction.description }}</p>
           <p><strong>Location:</strong> {{ attraction.coordinate}}</p>

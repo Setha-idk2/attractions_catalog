@@ -20,5 +20,7 @@ class CategorySeeder extends Seeder
             'name' => 'Culture',
             'description' => 'Historical and educational sites',
         ]);
+
+        
     }
 }

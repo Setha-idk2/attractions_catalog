@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Attraction;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,9 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            CategorySeeder::class,
-            AttractionSeeder::class,
+        $categories = Category::factory(5)->create();
+
+        Attraction::factory(50)->create([
+            'category_id' => $categories->random()->id,
         ]);
 
 
