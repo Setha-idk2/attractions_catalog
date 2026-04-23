@@ -1,0 +1,1 @@
+a simple website that displays a list of attractions from anywhere in the world. Guests can view the attractions and their details without login in. it does not have login features or user accounts. the FrontEnd us Nuxt.js while the BackEnd use laravel with sqlite
