@@ -1,6 +1,6 @@
 <template>
   <div class="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
-    <div class="relative overflow-hidden h-48">
+    <div class="relative overflow-hidden h-58">
       <img 
         :src="attraction.img_url || '/placeholder.png'" 
         :alt="`${attraction.name} image`" 

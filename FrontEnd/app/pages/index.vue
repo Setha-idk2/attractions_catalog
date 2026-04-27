@@ -1,15 +1,15 @@
 <template>
-  <div class="max-w-7xl mx-auto p-5">
-    <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Attraction Catalog</h1>
+  <div class="max-w-screen mx-auto p-5">
+    <h1 class="text-5xl font-bold mb-15 text-blue-500 underline drop-shadow-lg">Attraction Catalog</h1>
 
-    <div class="mb-10 max-w-2xl mx-auto">
+    <div class="mb-15 max-w-2xl relative">
       <input 
         v-model="searchTerm" 
         type="text" 
         placeholder="Search by name, description, coordinate, or category..." 
-        class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+        class="w-full px-4 py-3 rounded-lg border border-blue-300 shadow-md shadow-blue-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all focus:shadow-lg focus:shadow-blue-800"
       >
-      <p v-if="searchTerm" class="mt-2 text-sm text-gray-500">
+      <p v-if="searchTerm" class="mt-5 text-sm text-gray-500 absolute left-0">
         Showing {{ filteredAttractions.length }} results for "{{ searchTerm }}"
       </p>
     </div>
@@ -22,10 +22,11 @@
       {{ error }}
     </div>
 
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 justify-between place-items-center">
       <AttractionCard 
         v-for="attraction in filteredAttractions" 
         :key="attraction.id"
+        class="min-w-[200px] max-w-[470px] h-[450px]"
         :attraction="attraction"
         @click="navigateToDetail(attraction.id)"
       />

@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-7xl mx-auto p-5">
-    <h1 class="text-2xl font-bold text-center mb-4">Attraction Detail</h1>
+  <div class="max-w-screen mx-auto p-5">
+    <h1 class="text-5xl font-bold mb-15 text-blue-500 underline drop-shadow-lg">Attraction Detail</h1>
     
     <div v-if="loading" class="text-center py-8 bg-blue-50 border border-blue-200 rounded-lg text-blue-700">
       Loading attraction details...
@@ -10,11 +10,13 @@
       {{ error }}
     </div>
     
-    <div v-else>
-      <img :src="attraction.img_url" alt="Attraction image" class="w-full rounded-lg mt-4">
-      <h2 class="text-xl font-semibold mb-2">{{ attraction.name }}</h2>
-      <p class="text-gray-700 text-lg">{{ attraction.description }}</p>
-      <p class="mt-4 text-sm text-gray-500">Coordinate: {{ attraction.coordinate }}</p>
+    <div v-else class="max-w-screen mx-auto p-5 flex flex-row gap-5">
+      <img :src="attraction.img_url" alt="Attraction image" class="w-[30%] rounded-lg shadow-md mb-10">
+      <div class="flex flex-col gap-5 mt-10">
+        <h2 class="text-xl font-semibold mb-2">{{ attraction.name }}</h2>
+        <p class="text-gray-700 text-lg">{{ attraction.description }}</p>
+        <p class="mt-4 text-sm text-gray-500">Coordinate: {{ attraction.coordinate }}</p>
+      </div>
     </div>
   </div>
 </template>
