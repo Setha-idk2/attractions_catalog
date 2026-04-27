@@ -1,47 +1,39 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <header class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-          Discover Amazing Places
-        </h1>
-        <p class="mt-5 max-w-xl mx-auto text-xl text-gray-500">
-          Explore the best attractions and hidden gems in our catalog.
-        </p>
-        <div class="mt-8">
-          <router-link 
-            to="/search" 
-            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors"
-          >
-            🔍 Browse All Attractions
-          </router-link>
-        </div>
-      </div>
-    </header>
+  <div class="max-w-7xl mx-auto p-5">
+    <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Attraction Catalog</h1>
 
-    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-end mb-8">
-        <div>
-          <h2 class="text-2xl font-bold text-gray-900">Featured Attractions</h2>
-          <p class="text-gray-600">Handpicked spots just for you.</p>
-        </div>
-        <router-link to="/search" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-          View all &rarr;
-        </router-link>
-      </div>
+    <div class="mb-10 max-w-2xl mx-auto">
+      <input 
+        v-model="searchTerm" 
+        type="text" 
+        placeholder="Search by name, description, coordinate, or category..." 
+        class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+      >
+      <p v-if="searchTerm" class="mt-2 text-sm text-gray-500">
+        Showing {{ filteredAttractions.length }} results for "{{ searchTerm }}"
+      </p>
+    </div>
 
-      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div v-for="i in 3" :key="i" class="h-64 bg-gray-200 animate-pulse rounded-xl"/>
-      </div>
+    <div v-if="loading" class="text-center p-10 bg-blue-50 border border-blue-200 rounded-lg text-blue-700">
+      Loading attractions...
+    </div>
+    
+    <div v-else-if="error" class="text-center p-10 bg-red-50 border border-red-200 rounded-lg text-red-700">
+      {{ error }}
+    </div>
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <AttractionCard 
-          v-for="attraction in featuredAttractions" 
-          :key="attraction.id" 
-          :attraction="attraction"
-        />
-      </div>
-    </main>
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <AttractionCard 
+        v-for="attraction in filteredAttractions" 
+        :key="attraction.id"
+        :attraction="attraction"
+        @click="navigateToDetail(attraction.id)"
+      />
+    </div>
+
+    <div v-if="!loading && filteredAttractions.length === 0" class="text-center py-20 text-gray-500">
+      No attractions found matching your search.
+    </div>
   </div>
 </template>
 
@@ -49,29 +41,57 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
+const router = useRouter();
 const attractions = ref([]);
+const searchTerm = ref('');
 const loading = ref(true);
+const error = ref(null);
 
-// Get only the first 3 attractions for the homepage display
-const featuredAttractions = computed(() => {
-  return attractions.value.slice(0, 3);
+/**
+  * Filter Logic:
+  * Computed property that updates whenever searchTerm or attractions change.
+  */
+const filteredAttractions = computed(() => {
+  if (!searchTerm.value.trim()) {
+    return attractions.value;
+  }
+
+  const query = searchTerm.value.toLowerCase();
+
+  return attractions.value.filter(item => {
+    return (
+      item.name?.toLowerCase().includes(query) ||
+      item.description?.toLowerCase().includes(query) ||
+      item.coordinate?.toLowerCase().includes(query) ||
+      item.category?.name?.toLowerCase().includes(query)
+    );
+  });
 });
 
-const fetchFeatured = async () => {
+const fetchAttractions = async () => {
   loading.value = true;
+  error.value = null;
   try {
     const response = await axios.get('http://127.0.0.1:8000/api/attractions');
-    if (response.data && response.data.data) {
+    if (response.status === 200) {
       attractions.value = response.data.data;
+    } else {
+      throw new Error("Invalid API response structure.");
     }
   } catch (e) {
-    console.error("Failed to load featured items", e);
+    console.error("Error fetching attractions:", e);
+    error.value = "Unable to load attractions. Please ensure the backend server is running.";
   } finally {
     loading.value = false;
   }
 };
 
 onMounted(() => {
-  fetchFeatured();
+  fetchAttractions();
 });
+
+const navigateToDetail = (id) => {
+  // Navigate to dynamic route using attraction ID
+  router.push(`/attractions/${id}`);
+};
 </script>
