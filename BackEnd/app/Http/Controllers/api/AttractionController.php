@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attraction;
+use App\Http\Resources\AttractionResource;
 use Illuminate\Http\Request;
 
 class AttractionController extends Controller
@@ -13,17 +14,16 @@ class AttractionController extends Controller
         // Get all attractions with their categories
         $attractions = Attraction::with('category')->get();
         
-        return response()->json([
-            'message' => 'Attractions retrieved successfully',
-            'data' => $attractions,
-        ], 200);
+        return AttractionResource::collection($attractions)->additional([
+            'message' => 'Attractions retrieved successfully'
+        ]);
     }
 
+    //when api/attractions/${id} is call return the attraction with 
     public function show(Attraction $attraction)
     {
-        return response()->json([
-            'message' => 'Attraction retrieved successfully',
-            'data' => $attraction
-        ], 200);
+        return (new AttractionResource($attraction))->additional([
+            'message' => 'Attraction retrieved successfully'
+        ]);
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('coordinate')->nullable();//location in latitude and longitude or address. any way that user can use to find it
-            $table->string('img_path')->nullable();
+            $table->string('img_path')->nullable();//the url of the image like localhost:8000/storage/attractions/img.jpg 
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

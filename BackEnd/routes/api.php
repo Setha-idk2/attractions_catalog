@@ -9,8 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/attractions', [AttractionController::class, 'index']);
-Route::get('/attractions/{id}', [AttractionController::class, 'show']);
+Route::apiResource('attractions', AttractionController::class);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{id}', [CategoryController::class, 'show']);

@@ -21,7 +21,7 @@ class AttractionFactory extends Factory
             'name' => $this->faker->city() . ' Landmark',
             'description' => $this->faker->paragraph(),
             'coordinate' => $this->faker->latitude() . ', ' . $this->faker->longitude(),
-            'img_path' => 'images/placeholders/' . $this->faker->numberBetween(1, 10) . '.jpg',
+            'img_path' => '1/1.png',
             
             // This automatically creates a Category record if you don't specify one
             'category_id' => \App\Models\Category::factory(), 

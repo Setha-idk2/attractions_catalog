@@ -25,8 +25,9 @@
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <AttractionCard 
         v-for="attraction in filteredAttractions" 
-        :key="attraction.id" 
+        :key="attraction.id"
         :attraction="attraction"
+        @click="navigateToDetail(attraction.id)"
       />
     </div>
 
@@ -40,15 +41,16 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
+const router = useRouter();
 const attractions = ref([]);
 const searchTerm = ref('');
 const loading = ref(true);
 const error = ref(null);
 
 /**
- * Filter Logic:
- * Computed property that updates whenever searchTerm or attractions change.
- */
+  * Filter Logic:
+  * Computed property that updates whenever searchTerm or attractions change.
+  */
 const filteredAttractions = computed(() => {
   if (!searchTerm.value.trim()) {
     return attractions.value;
@@ -71,8 +73,7 @@ const fetchAttractions = async () => {
   error.value = null;
   try {
     const response = await axios.get('http://127.0.0.1:8000/api/attractions');
-    
-    if (response.data && response.data.message === "Attractions retrieved successfully") {
+    if (response.status === 200) {
       attractions.value = response.data.data;
     } else {
       throw new Error("Invalid API response structure.");
@@ -88,4 +89,9 @@ const fetchAttractions = async () => {
 onMounted(() => {
   fetchAttractions();
 });
+
+const navigateToDetail = (id) => {
+  // Navigate to dynamic route using attraction ID
+  router.push(`/attractions/${id}`);
+};
 </script>

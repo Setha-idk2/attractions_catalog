@@ -22,6 +22,18 @@ class Attraction extends Model
         'category_id' => 'integer',
     ];
 
+    protected $appends = ['img_url'];
+
+    public function getImgUrlAttribute()
+    {
+        if (!$this->img_path) {
+            return null;
+        }
+
+        // Return full URL using asset helper
+        return asset('storage/' . $this->img_path);
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
